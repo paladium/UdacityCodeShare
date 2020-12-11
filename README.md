@@ -29,4 +29,12 @@ If will create all the nessesary resources:
 Authentication is done using Auth0 service.
 
 ## API
-You can find the postman collection in the root of this repo to explore the API.
+You can find the postman collection in the root of this repo to explore the API:
+
+Use apiID: cb0j0iti22 to access the gateway.
+
+- Get all codes (without authentication)
+- Get my codes - with access token
+- Like the code
+- Delete my code
+- Create new code

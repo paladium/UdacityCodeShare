@@ -1,6 +1,6 @@
 <template>
     <div class="create-code">
-        <b-card title="Add code item">
+        <b-card title="Add code item" v-if="createCodeForm">
             <b-form @submit="createCode">
                 <b-form-group
                     id="input-group-1"

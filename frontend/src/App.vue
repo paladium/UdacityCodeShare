@@ -19,7 +19,9 @@ export default class App extends Vue {
     async mounted() {
         this.$auth.$watch("loading", () => {
             this.$auth.getIdTokenClaims({})?.then((claims) => {
-                this.$store.commit("setAccessToken", claims.__raw);
+                if (claims) {
+                    this.$store.commit("setAccessToken", claims.__raw);
+                }
             });
         });
     }
@@ -27,7 +29,6 @@ export default class App extends Vue {
 </script>
 
 <style lang="scss">
-
 #nav {
     padding: 30px;
 
