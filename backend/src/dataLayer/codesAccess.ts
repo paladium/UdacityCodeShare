@@ -76,6 +76,19 @@ export class CodesAccess {
         }).promise();
     }
 
+    async unlikeCode(id: string) {
+        await this.doClient.update({
+            TableName: this.codesTable,
+            Key: {
+                "codeId": id,
+            },
+            UpdateExpression: "set likes = likes - :val",
+            ExpressionAttributeValues: {
+                ":val": 1
+            },
+        }).promise();
+    }
+
     async deleteCodeById(id: string) {
         await this.doClient.delete({
             TableName: this.codesTable,

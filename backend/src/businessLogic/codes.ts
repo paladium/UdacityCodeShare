@@ -101,3 +101,11 @@ export async function likeUnlikeCode(codeId: string, userId: string) {
         item.codeUrl = getCodeUrl(item);
     return item;
 }
+
+export async function likeCode(codeId: string){
+    await codeAccess.likeCode(codeId);
+}
+
+export async function unlikeCode(codeId: string){
+    await codeAccess.unlikeCode(codeId);
+}
