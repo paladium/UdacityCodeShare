@@ -11,6 +11,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     const codeId = event.pathParameters.codeId;
     const userId = getUserId(event);
 
+    //In case we fail to delete the item, we return 400
     try {
         await deleteCode(codeId, userId);
         logger.info(`Deleted todo item for userId=${userId}, codeId=${codeId}`);

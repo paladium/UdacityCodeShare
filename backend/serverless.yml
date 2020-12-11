@@ -180,6 +180,7 @@ functions:
         Action:
           - dynamodb:UpdateItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.CODES_TABLE}
+        
   UpdateLikeCount:
     handler: src/lambda/dynamodb/updateLikeCount.handler
     events:
@@ -189,9 +190,9 @@ functions:
     iamRoleStatements:
       - Effect: Allow
         Action:
-          - s3:GetObject
-        Resource: arn:aws:s3:::${self:provider.environment.IMAGES_S3_BUCKET}/*
-
+          - dynamodb:UpdateItem
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.CODES_TABLE}
+        
   GetUploadLink:
     handler: src/lambda/http/getCodeUploadLink.handler
     events:

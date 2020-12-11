@@ -53,6 +53,7 @@ export async function deleteCode(id: string, userId: string) {
 }
 
 export async function createItem(createItem: CreateCodeItemRequest, userId: string): Promise<CodeItem> {
+    //Generate unique id for the item
     const item = <CodeItem>{
         codeId: uuid(),
         userId: userId,

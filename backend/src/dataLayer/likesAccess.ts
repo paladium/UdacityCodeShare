@@ -1,6 +1,9 @@
 import * as AWS from 'aws-sdk';
 const AWSXRay = require('aws-xray-sdk');
 
+/**
+ * The class is used to access the likes table in dynamodb
+ */
 export class LikesAccess {
     constructor(
         private readonly XAWS = AWSXRay.captureAWS(AWS),

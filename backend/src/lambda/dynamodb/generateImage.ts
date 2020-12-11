@@ -14,6 +14,7 @@ export const handler: DynamoDBStreamHandler = async (event: DynamoDBStreamEvent)
         if (record.eventName !== 'INSERT') {
             continue
         }
+        //Get the file from s3 bucket based on the name from the record
         const newItem = record.dynamodb.NewImage
         const codeId = newItem.codeId.S;
         const codeTextUrl = newItem.codeTextUrl.S;
@@ -22,10 +23,12 @@ export const handler: DynamoDBStreamHandler = async (event: DynamoDBStreamEvent)
         const url = getCarbonURL(codeContent, <Options>{
             language: "auto"
         });
+        //Generate the image
         const imageBuffer = await getScreenshot({ url });
         logger.info("Generated image for", {
             codeId: codeId,
         });
+        //Upload the image to s3
         await uploadImage(imageBuffer, codeId);
         logger.info("Uploaded image for", {
             codeId: codeId,

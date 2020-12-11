@@ -13,6 +13,12 @@ export class S3Access {
     ) {
 
     }
+
+    /**
+     * Uploads the image to the s3
+     * @param file 
+     * @param name 
+     */
     async uploadImage(file: Buffer, name: string){
         await this.s3Client.upload({
             Bucket: this.bucketName,
@@ -21,6 +27,10 @@ export class S3Access {
             ContentType: "image",
         }).promise();
     }
+    /**
+     * Gets a new signed link to access the image
+     * @param attachment 
+     */
     getAttachmentUrl(attachment: string): string{
         return this.s3Client.getSignedUrl("getObject", {
             Bucket: this.bucketName,
@@ -29,6 +39,11 @@ export class S3Access {
         });
     }
 
+    /**
+     * Returns a presigned upload link
+     * @param filename 
+     * @param bucket 
+     */
     getPresignedUrl(filename: string, bucket: string): string {
         return this.s3Client.getSignedUrl("putObject", {
             Bucket: bucket,
@@ -37,6 +52,11 @@ export class S3Access {
         });
     }
 
+    /**
+     * Gets the file from s3 bucket and returns it as string
+     * @param filename 
+     * @param bucket 
+     */
     async getObject(filename: string, bucket: string): Promise<string>{
         const object = await this.s3Client.getObject({
             Bucket: bucket,

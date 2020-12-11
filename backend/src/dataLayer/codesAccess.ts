@@ -2,6 +2,9 @@ import * as AWS from 'aws-sdk';
 import { CodeItem } from '../models/CodeItem';
 const AWSXRay = require('aws-xray-sdk');
 
+/**
+ * The class is used to access the codes table in DynamoDB
+ */
 export class CodesAccess {
     constructor(
         private readonly XAWS = AWSXRay.captureAWS(AWS),
