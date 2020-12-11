@@ -16,7 +16,7 @@ import NavigationBar from "@/components/NavigationBar.vue";
     components: { NavigationBar },
 })
 export default class App extends Vue {
-    async mounted() {
+    mounted() {
         this.$auth.$watch("loading", () => {
             this.$auth.getIdTokenClaims({})?.then((claims) => {
                 if (claims) {

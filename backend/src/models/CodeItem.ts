@@ -2,7 +2,7 @@ export interface CodeItem{
     userId: string;
     codeId: string;
     createdAt: string;
-    code: string;
+    codeTextUrl: string;
     codeUrl?: string;
     title: string;
     likes: number;

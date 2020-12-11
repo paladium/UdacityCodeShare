@@ -61,6 +61,7 @@ functions:
           method: get
           path: codes
           cors: true
+          authorizer: Auth
     iamRoleStatements:
       - Effect: Allow
         Action:

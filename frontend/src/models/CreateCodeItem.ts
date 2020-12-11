@@ -1,4 +1,4 @@
 export interface CreateCodeItem{
-    code: string;
+    codeTextUrl: string;
     title: string;
 }

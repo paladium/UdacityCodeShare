@@ -49,6 +49,9 @@ export default new Vuex.Store({
         },
         createCode({commit, state}, create: CreateCodeItem){
             return Axios.post(join(API_URL, "codes"), create);
+        },
+        getCodeUploadLink({commit, state}, id: string){
+            return Axios.post(join(API_URL, "codes", id, "attachment")).then((response) => response.data.link);
         }
     },
     modules: {

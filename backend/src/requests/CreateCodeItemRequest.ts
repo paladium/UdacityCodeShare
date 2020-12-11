@@ -2,6 +2,6 @@
  * Fields in a request to create a single code item.
  */
 export interface CreateCodeItemRequest {
-    code: string;
+    codeTextUrl: string;
     title: string;
 }

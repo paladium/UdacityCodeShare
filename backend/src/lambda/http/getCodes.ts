@@ -6,19 +6,17 @@ import { getUserId } from '../utils';
 const logger = createLogger("getAllCodes");
 
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    let userId = null;
-    try {
-        userId = getUserId(event);
-    }
-    finally {
-        let items = await getAllCodes(userId);
-        logger.info(`Got items for user: items=${JSON.stringify(items)}`);
-        return {
-            statusCode: 200,
-            headers: {
-                'Access-Control-Allow-Origin': "*",
-            },
-            body: JSON.stringify(items)
-        };
-    }
+    const userId = getUserId(event);
+    let items = await getAllCodes(userId);
+    logger.info(`Got items for user`, {
+        userId,
+        items
+    });
+    return {
+        statusCode: 200,
+        headers: {
+            'Access-Control-Allow-Origin': "*",
+        },
+        body: JSON.stringify(items)
+    };
 }

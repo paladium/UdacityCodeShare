@@ -10,18 +10,16 @@ const codeAccess = new CodesAccess();
 const s3Access = new S3Access();
 const likeAccess = new LikesAccess();
 
-export async function getAllCodes(userId: string | null): Promise<CodeItem[]> {
+export async function getAllCodes(userId: string): Promise<CodeItem[]> {
     const items = await codeAccess.getAllCodes();
     //Go for each item and generate a signed url link
     for (let item of items) {
         if (item.codeUrl)
             item.codeUrl = getCodeUrl(item);
-        if (userId != null) {
-            //Check whether each item is liked by the current user
-            const existingLike = await likeAccess.findLike(item.codeId, userId);
-            //If count is zero, that means it is not liked yet, otherwise it is liked
-            item.isLikedByCurrentUser = existingLike.Count != 0;
-        }
+        //Check whether each item is liked by the current user
+        const existingLike = await likeAccess.findLike(item.codeId, userId);
+        //If count is zero, that means it is not liked yet, otherwise it is liked
+        item.isLikedByCurrentUser = existingLike.Count != 0;
     }
     sortItems(items);
     return items;
@@ -59,9 +57,9 @@ export async function createItem(createItem: CreateCodeItemRequest, userId: stri
         codeId: uuid(),
         userId: userId,
         createdAt: new Date().toISOString(),
-        code: createItem.code,
         likes: 0,
         title: createItem.title,
+        codeTextUrl: createItem.codeTextUrl,
     };
     return await codeAccess.createCode(item);
 }
@@ -102,10 +100,10 @@ export async function likeUnlikeCode(codeId: string, userId: string) {
     return item;
 }
 
-export async function likeCode(codeId: string){
+export async function likeCode(codeId: string) {
     await codeAccess.likeCode(codeId);
 }
 
-export async function unlikeCode(codeId: string){
+export async function unlikeCode(codeId: string) {
     await codeAccess.unlikeCode(codeId);
 }

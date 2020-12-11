@@ -15,21 +15,20 @@
                     ></b-form-input>
                 </b-form-group>
 
-                <b-form-group
-                    id="input-group-2"
-                    label="Code:"
-                    label-for="input-2"
-                >
-                    <b-textarea
-                        id="input-2"
-                        v-model="createCodeForm.code"
-                        required
-                        placeholder="Enter code"
-                    >
-                    </b-textarea>
-                </b-form-group>
+                <b-form-file
+                    v-model="codeFile"
+                    :state="Boolean(codeFile)"
+                    placeholder="Choose a file or drop it here..."
+                    drop-placeholder="Drop file here..."
+                    required
+                ></b-form-file>
 
-                <b-button type="submit" variant="primary">Create code</b-button>
+                <b-button
+                    style="margin-top: 10px"
+                    type="submit"
+                    variant="primary"
+                    >Create code</b-button
+                >
             </b-form>
         </b-card>
     </div>
@@ -38,27 +37,36 @@
 import { CreateCodeItem } from "@/models/CreateCodeItem";
 import Vue from "vue";
 import Component from "vue-class-component";
+import { v4 } from "uuid";
 
 @Component
 export default class CreateCode extends Vue {
+    codeFile: File | null = null;
     mounted() {
         this.createCodeForm = <CreateCodeItem>{
             title: "",
-            code: "",
+            codeTextUrl: "",
         };
     }
-    createCode(event: any) {
+    async createCode(event: any) {
         event.preventDefault();
-        this.$store.dispatch("createCode", this.createCodeForm).then(() => {
-            this.$router.push({ name: "my-codes" }, () => {
-                this.$bvToast.toast(
-                    `The code item was successfully added. Wait for a little while, until the image is being generated`,
-                    {
-                        title: "Added",
-                        autoHideDelay: 5000,
-                    }
-                );
-            });
+        //We need to upload the file, first ask for the link to upload the file to, upload the file and then
+        const id = v4();
+        const link = await this.$store.dispatch("getCodeUploadLink", id);
+        await fetch(link, {
+            body: this.codeFile as any,
+            method: "PUT",
+        });
+        this.createCodeForm!.codeTextUrl = `${id}.txt`;
+        await this.$store.dispatch("createCode", this.createCodeForm);
+        this.$router.push({ name: "my-codes" }, () => {
+            this.$bvToast.toast(
+                `The code item was successfully added. Wait for a little while, until the image is being generated`,
+                {
+                    title: "Added",
+                    autoHideDelay: 5000,
+                }
+            );
         });
     }
 
