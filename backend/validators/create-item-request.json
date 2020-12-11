@@ -1,0 +1,18 @@
+{
+    "$schema" : "http://json-schema.org/draft-04/schema#",
+    "title": "create-item",
+    "type":"object",
+    "properties": {
+        "code":{
+            "type":"string"
+        },
+        "title": {
+            "type": "string"
+        }
+    },
+    "required":[
+        "code",
+        "title"
+    ],
+    "additionalProperties": false
+}
