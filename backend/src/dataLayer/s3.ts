@@ -8,7 +8,6 @@ export class S3Access {
         private readonly s3Client: AWS.S3 = new XAWS.S3({
             signatureVersion: 'v4',
             region: process.env.region,
-            params: { Bucket: bucketName },
         }),
         private readonly signedUrlExpireSeconds = 60 * 10
     ) {
@@ -22,18 +21,27 @@ export class S3Access {
             ContentType: "image",
         }).promise();
     }
-    getPresignedUrl(todoId: string): string {
-        return this.s3Client.getSignedUrl("putObject", {
-            Bucket: this.bucketName,
-            Key: `${todoId}.png`,
-            Expires: this.signedUrlExpireSeconds
-        });
-    }
     getAttachmentUrl(attachment: string): string{
         return this.s3Client.getSignedUrl("getObject", {
             Bucket: this.bucketName,
             Key: attachment,
             Expires: this.signedUrlExpireSeconds
         });
+    }
+
+    getPresignedUrl(filename: string, bucket: string): string {
+        return this.s3Client.getSignedUrl("putObject", {
+            Bucket: bucket,
+            Key: filename,
+            Expires: this.signedUrlExpireSeconds
+        });
+    }
+
+    async getObject(filename: string, bucket: string): Promise<string>{
+        const object = await this.s3Client.getObject({
+            Bucket: bucket,
+            Key: filename
+        }).promise();
+        return object.Body!.toString("utf-8");
     }
 }

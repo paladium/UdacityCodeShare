@@ -1,6 +1,6 @@
 import { DynamoDBStreamEvent, DynamoDBStreamHandler } from 'aws-lambda'
 import 'source-map-support/register'
-import { uploadImage } from '../../businessLogic/codes';
+import { getCodeContent, uploadImage } from '../../businessLogic/codes';
 import { getScreenshot } from '../../dataLayer/carbon/screenshot'
 import { getCarbonURL, Options } from '../../dataLayer/carbon/url'
 import { createLogger } from '../../utils/logger';
@@ -16,8 +16,10 @@ export const handler: DynamoDBStreamHandler = async (event: DynamoDBStreamEvent)
         }
         const newItem = record.dynamodb.NewImage
         const codeId = newItem.codeId.S;
-        const code = newItem.code.S;
-        const url = getCarbonURL(code, <Options>{
+        const codeTextUrl = newItem.codeTextUrl.S;
+        //Get the object from s3
+        const codeContent = await getCodeContent(codeTextUrl);
+        const url = getCarbonURL(codeContent, <Options>{
             language: "auto"
         });
         const imageBuffer = await getScreenshot({ url });

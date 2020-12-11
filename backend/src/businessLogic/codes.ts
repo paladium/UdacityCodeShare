@@ -107,3 +107,13 @@ export async function likeCode(codeId: string) {
 export async function unlikeCode(codeId: string) {
     await codeAccess.unlikeCode(codeId);
 }
+
+export async function getCodeUploadSignedUrl(id: string){
+    const filename = `${id}.txt`;
+    const link = s3Access.getPresignedUrl(filename, process.env.FILES_S3_BUCKET);
+    return link;
+}
+
+export async function getCodeContent(filename: string){
+    return s3Access.getObject(filename, process.env.FILES_S3_BUCKET);
+}

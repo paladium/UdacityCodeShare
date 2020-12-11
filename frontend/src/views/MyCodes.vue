@@ -30,6 +30,15 @@ export default class MyCodes extends Vue {
         } else {
             this.$store.dispatch("getUserCodes");
         }
+        if (this.$route.query.uploaded) {
+            this.$bvToast.toast(
+                `The code item was successfully added. Wait for a little while, until the image is being generated`,
+                {
+                    title: "Added",
+                    autoHideDelay: 5000,
+                }
+            );
+        }
     }
 
     get codes() {

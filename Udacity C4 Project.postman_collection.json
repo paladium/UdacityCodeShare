@@ -223,6 +223,51 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get file URL",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{authToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{authToken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{apiId}}.execute-api.us-east-2.amazonaws.com/dev/codes/a7c13a35-3462-4550-8c3b-9727a9312210/link",
+							"protocol": "https",
+							"host": [
+								"{{apiId}}",
+								"execute-api",
+								"us-east-2",
+								"amazonaws",
+								"com"
+							],
+							"path": [
+								"dev",
+								"codes",
+								"a7c13a35-3462-4550-8c3b-9727a9312210",
+								"link"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"event": [
@@ -274,12 +319,12 @@
 	],
 	"variable": [
 		{
-			"id": "d38d688b-a410-448b-8337-75bb4ad7999c",
+			"id": "c3c51c36-7a08-4090-98cd-e3026a45d497",
 			"key": "apiId",
 			"value": "cb0j0iti22"
 		},
 		{
-			"id": "cf12ece5-4e1c-4ea9-8ecc-af370e91e7e5",
+			"id": "0d43e1a6-f0c4-4832-981b-4e170d8741de",
 			"key": "authToken",
 			"value": ""
 		}

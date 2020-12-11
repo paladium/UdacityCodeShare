@@ -17,6 +17,7 @@ provider:
     CODES_TABLE: CodesTable-${self:provider.stage}
     USER_ID_INDEX: CodesUserIdIndex
     IMAGES_S3_BUCKET: udagram-code-images-${self:provider.stage}
+    FILES_S3_BUCKET: udagram-code-files-${self:provider.stage}
     LIKES_TABLE: Likes-${self:provider.stage}
   tracing:
     lambda: true
@@ -173,6 +174,10 @@ functions:
         Resource: arn:aws:s3:::${self:provider.environment.IMAGES_S3_BUCKET}/*      
       - Effect: Allow
         Action:
+          - s3:GetObject
+        Resource: arn:aws:s3:::${self:provider.environment.FILES_S3_BUCKET}/*
+      - Effect: Allow
+        Action:
           - dynamodb:UpdateItem
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.CODES_TABLE}
   UpdateLikeCount:
@@ -184,8 +189,22 @@ functions:
     iamRoleStatements:
       - Effect: Allow
         Action:
-          - dynamodb:UpdateItem
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.CODES_TABLE}
+          - s3:GetObject
+        Resource: arn:aws:s3:::${self:provider.environment.IMAGES_S3_BUCKET}/*
+
+  GetUploadLink:
+    handler: src/lambda/http/getCodeUploadLink.handler
+    events:
+      - http:
+          method: post
+          path: codes/{codeId}/link
+          cors: true
+          authorizer: Auth
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - s3:PutObject
+        Resource: arn:aws:s3:::${self:provider.environment.FILES_S3_BUCKET}/*
 
 resources:
   Resources:
@@ -252,6 +271,20 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: ${self:provider.environment.IMAGES_S3_BUCKET}
+        CorsConfiguration:
+          CorsRules:
+            - AllowedHeaders:
+                - "*"
+              AllowedMethods:
+                - GET
+                - POST
+                - PUT
+              AllowedOrigins:
+                - "*"
+    FilesBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:provider.environment.FILES_S3_BUCKET}
         CorsConfiguration:
           CorsRules:
             - AllowedHeaders:
