@@ -184,7 +184,7 @@ functions:
       - Effect: Allow
         Action:
           - dynamodb:UpdateItem
-        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.LIKES_TABLE}
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.CODES_TABLE}
 
 resources:
   Resources:
@@ -246,7 +246,7 @@ resources:
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:provider.environment.LIKES_TABLE}
         StreamSpecification:
-          StreamViewType: NEW_IMAGE
+          StreamViewType: NEW_AND_OLD_IMAGES
     CodesBucket:
       Type: AWS::S3::Bucket
       Properties:

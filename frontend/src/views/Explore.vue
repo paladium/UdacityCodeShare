@@ -29,9 +29,15 @@ export default class Explore extends Vue {
             let existingItem = this.allCodes.find((a) => a.codeId == code.codeId);
             if(existingItem){
                 if(willBeLiked)
+                {
                     existingItem.likes++;
+                    existingItem.isLikedByCurrentUser = true;
+                }
                 else
+                {
                     existingItem.likes--;
+                    existingItem.isLikedByCurrentUser = false;
+                }
             }
         });
     }
