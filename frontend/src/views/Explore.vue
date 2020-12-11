@@ -1,7 +1,8 @@
 <template>
     <div class="home">
+        <h1>Explore other people's codes</h1>
         <div v-for="item in allCodes" :key="item.codeId">
-            <code-item @like="likeCode" :code="item"></code-item>
+            <code-item @like="likeUnlikeCode($event, true)" @unlike="likeUnlikeCode($event, false)" :code="item"></code-item>
         </div>
     </div>
 </template>
@@ -15,8 +16,6 @@ import { CodeItem } from "@/models/CodeItem";
     components: {"codeItem": CodeItemComponent},
 })
 export default class Explore extends Vue {
-
-
     mounted() {
         this.$store.dispatch("getAllCodes");
     }
@@ -24,12 +23,15 @@ export default class Explore extends Vue {
     get allCodes(){
         return this.$store.state.allCodes as CodeItem[];
     }
-    likeCode(code: CodeItem){
-        this.$store.dispatch("likeCode", code.codeId).then((item) => {
+    likeUnlikeCode(code: CodeItem, willBeLiked = false){
+        this.$store.dispatch("likeUnlikeCode", code.codeId).then((item) => {
             //Replace the item with new updated item
             let existingItem = this.allCodes.find((a) => a.codeId == code.codeId);
             if(existingItem){
-                existingItem.likes = item.likes;
+                if(willBeLiked)
+                    existingItem.likes++;
+                else
+                    existingItem.likes--;
             }
         });
     }

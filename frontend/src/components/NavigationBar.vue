@@ -6,8 +6,8 @@
 
         <b-collapse id="nav-collapse" is-nav>
             <b-navbar-nav>
+                <b-nav-item @click="myCodes()">My codes</b-nav-item>
                 <b-nav-item @click="explore()">Explore</b-nav-item>
-                <b-nav-item v-if="$auth.isAuthenticated" @click="myCodes">My codes</b-nav-item>
             </b-navbar-nav>
 
             <!-- Right aligned nav items -->

@@ -17,6 +17,7 @@ provider:
     CODES_TABLE: CodesTable-${self:provider.stage}
     USER_ID_INDEX: CodesUserIdIndex
     IMAGES_S3_BUCKET: udagram-code-images-${self:provider.stage}
+    LIKES_TABLE: Likes-${self:provider.stage}
   tracing:
     lambda: true
     apiGateway: true
@@ -69,6 +70,10 @@ functions:
         Action:
           - s3:GetObject
         Resource: arn:aws:s3:::${self:provider.environment.IMAGES_S3_BUCKET}/*
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.LIKES_TABLE}
 
   GetUserCodes:
     handler: src/lambda/http/getUserCodes.handler
@@ -91,6 +96,7 @@ functions:
         Action:
           - s3:GetObject
         Resource: arn:aws:s3:::${self:provider.environment.IMAGES_S3_BUCKET}/*
+
   DeleteCode:
     handler: src/lambda/http/deleteCode.handler
     events:
@@ -106,8 +112,8 @@ functions:
           - dynamodb:Query
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.CODES_TABLE}
 
-  LikeCode:
-    handler: src/lambda/http/likeCode.handler
+  LikeUnlikeCode:
+    handler: src/lambda/http/likeUnlikeCode.handler
     events:
       - http:
           method: put
@@ -120,6 +126,12 @@ functions:
           - dynamodb:UpdateItem
           - dynamodb:Query
         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.CODES_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+          - dynamodb:DeleteItem
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.LIKES_TABLE}
       - Effect: Allow
         Action:
           - s3:GetObject
@@ -206,6 +218,24 @@ resources:
                 KeyType: HASH
             Projection:
               ProjectionType: ALL
+    LikesTable:
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Delete
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: codeId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: codeId
+            KeyType: HASH
+          - AttributeName: userId
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+        TableName: ${self:provider.environment.LIKES_TABLE}
+        StreamSpecification:
+          StreamViewType: NEW_IMAGE
     CodesBucket:
       Type: AWS::S3::Bucket
       Properties:

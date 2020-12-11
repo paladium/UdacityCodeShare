@@ -2,7 +2,11 @@
     <div class="my-codes">
         <h1>My codes</h1>
         <div v-for="item in codes" :key="item.codeId">
-            <code-item @deleteItem="deleteCode" :myCode="true" :code="item"></code-item>
+            <code-item
+                @deleteItem="deleteCode"
+                :myCode="true"
+                :code="item"
+            ></code-item>
         </div>
     </div>
 </template>
@@ -17,15 +21,25 @@ import { CodeItem } from "@/models/CodeItem";
 })
 export default class MyCodes extends Vue {
     mounted() {
-        this.$store.dispatch("getUserCodes");
+        if (this.$store.state.accessToken == "") {
+            this.$store.subscribe((mutation) => {
+                if (mutation.type == "setAccessToken") {
+                    this.$store.dispatch("getUserCodes");
+                }
+            });
+        } else {
+            this.$store.dispatch("getUserCodes");
+        }
     }
 
     get codes() {
         return this.$store.state.userCodes as CodeItem[];
     }
-    deleteCode(code: CodeItem){
+    deleteCode(code: CodeItem) {
         this.$store.dispatch("deleteCode", code.codeId).then(() => {
-            const newCodes = this.codes.filter((item) => item.codeId != code.codeId);
+            const newCodes = this.codes.filter(
+                (item) => item.codeId != code.codeId
+            );
             this.$store.commit("setUserCodes", newCodes);
         });
     }

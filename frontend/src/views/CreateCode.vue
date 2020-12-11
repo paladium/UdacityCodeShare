@@ -50,10 +50,14 @@ export default class CreateCode extends Vue {
     createCode(event: any) {
         event.preventDefault();
         this.$store.dispatch("createCode", this.createCodeForm).then(() => {
-            this.$router.push({ name: "my-codes" });
-            this.$bvToast.toast(`The code item was successfully added. Wait for a little while, until the image is being generated`, {
-                title: "Added",
-                autoHideDelay: 5000,
+            this.$router.push({ name: "my-codes" }, () => {
+                this.$bvToast.toast(
+                    `The code item was successfully added. Wait for a little while, until the image is being generated`,
+                    {
+                        title: "Added",
+                        autoHideDelay: 5000,
+                    }
+                );
             });
         });
     }

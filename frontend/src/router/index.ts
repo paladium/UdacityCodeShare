@@ -10,11 +10,6 @@ Vue.use(VueRouter);
 const routes: RouteConfig[] = [
     {
         path: '/',
-        name: 'explore',
-        component: Explore,
-    },
-    {
-        path: '/my-codes',
         name: 'my-codes',
         component: MyCodes,
         beforeEnter: authGuard,
@@ -24,6 +19,11 @@ const routes: RouteConfig[] = [
         name: 'create-code',
         component: CreateCode,
         beforeEnter: authGuard
+    },
+    {
+        path: '/explore',
+        name: 'explore',
+        component: Explore,
     },
 ];
 

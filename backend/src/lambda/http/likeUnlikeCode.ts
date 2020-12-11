@@ -1,6 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda'
 import 'source-map-support/register'
-import { likeCode } from '../../businessLogic/codes'
+import { likeUnlikeCode } from '../../businessLogic/codes';
 import { createLogger } from '../../utils/logger'
 import { getUserId } from '../utils'
 
@@ -10,8 +10,8 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     const codeId = event.pathParameters.codeId
     const userId = getUserId(event);
 
-    const codeItem = await likeCode(codeId);
-    logger.info(`Liked code item for userId=${userId}, codeId=${codeId}`);
+    const codeItem = await likeUnlikeCode(codeId, userId);
+    logger.info(`Liked/unliked code item for userId=${userId}, codeId=${codeId}`);
 
     return {
         statusCode: 200,

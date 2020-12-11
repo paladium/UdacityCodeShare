@@ -44,7 +44,7 @@ export default new Vuex.Store({
         deleteCode({commit, state}, id: string){
             return Axios.delete(join(API_URL, "codes", id));
         },
-        likeCode({commit, state}, id: string){
+        likeUnlikeCode({commit, state}, id: string){
             return Axios.put(join(API_URL, "codes", id)).then((response) => response.data);
         },
         createCode({commit, state}, create: CreateCodeItem){

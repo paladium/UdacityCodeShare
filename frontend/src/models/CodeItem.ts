@@ -6,4 +6,5 @@ export interface CodeItem{
     codeUrl?: string;
     title: string;
     likes: number;
+    isLikedByCurrentUser?: boolean;
 }

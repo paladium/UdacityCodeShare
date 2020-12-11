@@ -7,14 +7,20 @@
             align="center"
             :img-src="code.codeUrl"
         >
-                <template v-if="!myCode">
-                    <b-button :disabled="!$auth.isAuthenticated" @click="like"
-                        >{{ code.likes }} <b-icon icon="star"
-                    /></b-button>
-                </template>
-                <template v-else>
-                    <b-button variant="danger" @click="deleteItem"> Delete </b-button>
-                </template>
+            <template v-if="!myCode">
+                <b-button :disabled="!$auth.isAuthenticated" @click="likeUnlike"
+                    >{{ code.likes }}
+                    <b-icon
+                        :icon="
+                            code.isLikedByCurrentUser ? 'star-fill' : 'star'
+                        "
+                /></b-button>
+            </template>
+            <template v-else>
+                <b-button variant="danger" @click="deleteItem">
+                    Delete
+                </b-button>
+            </template>
         </b-card>
     </div>
 </template>
@@ -22,19 +28,24 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { Prop } from "vue-property-decorator";
+import { CodeItem } from "@/models/CodeItem";
 
 @Component
-export default class CodeItem extends Vue {
+export default class CodeItemComponent extends Vue {
     @Prop()
     code!: CodeItem;
 
     @Prop({ default: false })
     myCode!: boolean;
 
-    like() {
-        this.$emit("like", this.code);
+    likeUnlike() {
+        if (this.code.isLikedByCurrentUser) {
+            this.$emit("unlike", this.code);
+        } else {
+            this.$emit("like", this.code);
+        }
     }
-    deleteItem(){
+    deleteItem() {
         this.$emit("deleteItem", this.code);
     }
 }
