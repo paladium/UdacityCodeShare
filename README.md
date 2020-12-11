@@ -1,7 +1,7 @@
 # Udacity Capstone Project - CodeShare
 ![CodeShare](./images/code-share.png)
 
-CodeShare is a serverless application which allows you to share small snippets of your code with the world.
+CodeShare is a serverless application which allows you to share small snippets of your code with the world - https://youthful-wright-29a5ce.netlify.app/.
 
 The code gets converted to the image using carbon.sh service (thanks to this repo - https://github.com/MaximeHeckel/carbonara) and get stored on S3 bucket.
 
